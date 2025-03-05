@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: protfolio-deployment
+  namespace: portfolio-ns
+  labels:
+    apps: protfolio-dep # This is the Deployment label
+spec:
+  replicas: 0 
+  selector:
+    matchLabels:
+      app: protfolio  # Must match pod labels
+  template:
+    metadata:
+      labels:
+        app: protfolio   # This is what the Service will use
+    spec:
+      containers:
+        - name: protfolio-pod
+          image: ujkumar11/portfolio:latest
+          ports:
+            - containerPort: 3000
