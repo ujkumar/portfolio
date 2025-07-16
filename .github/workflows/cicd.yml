@@ -1,0 +1,82 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+# permissions:
+#   id-token: write
+#   contents: read
+
+
+jobs:
+  trivy_scan:
+    name: Trivy Scane
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Manual Trivy Setup
+      uses: aquasecurity/setup-trivy@v0.2.0
+      with:
+        cache: true
+        version: v0.64.1
+
+    - name: Run Trivy vulnerability scanner in repo mode
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        ignore-unfixed: true
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL'
+        skip-setup-trivy: true
+    
+    # - name: Upload Trivy scan results to GitHub Security tab
+    #   uses: github/codeql-action/upload-sarif@v3
+    #   with:
+    #     sarif_file: 'trivy-results.sarif'
+
+  # sonarQube_scan:
+
+  # docker_install:
+
+  # docker_build_docker_push:
+
+  # docker_run:
+
+
+
+
+
+
+
+
+
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v3
+#         with:
+#             role-to-assume: arn:aws:iam::126113902004:role/Complete-CI-CD-Hackathon-OIDC
+#             aws-region: eu-west-1
+#       - name: RUN AWS CLI command
+#         run: aws s3 ls
+#       - name: SetUp Terraform
+#         uses: hashicorp/setup-terraform@v3
+      
+#       - name: Run init terraform
+#         run: |
+#           cd ./terraform 
+#           terraform init
+      
+#       - name: Run plan.
+#         run: |
+#           cd ./terraform 
+#           terraform plan
+
